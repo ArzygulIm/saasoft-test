@@ -13,7 +13,9 @@ const emit = defineEmits<{
 }>();
 
 const store = useAccountStore();
-const labelText = ref(props.account.labels?.map(l => l.text).join("; ") || "");
+const labelText = ref(
+  props.account.labels?.map((l) => l.text).join("; ") || ""
+);
 
 watch(labelText, (val) => {
   props.account.labels = val
@@ -29,7 +31,9 @@ function validate() {
     props.account.login.trim().length > 0 && props.account.login.length <= 100;
   const isPasswordValid =
     props.account.type === "Локальная"
-      ? props.account.password?.length > 0 && props.account.password.length <= 100
+      ? typeof props.account.password === "string" &&
+        props.account.password.length > 0 &&
+        props.account.password.length <= 100
       : true;
 
   props.account.isValid = isLoginValid && isPasswordValid;
@@ -57,7 +61,11 @@ function validate() {
     </el-form-item>
 
     <el-form-item :class="{ 'is-error': !props.account.isValid }">
-      <el-input v-model="props.account.login" placeholder="Логин" @blur="validate" />
+      <el-input
+        v-model="props.account.login"
+        placeholder="Логин"
+        @blur="validate"
+      />
     </el-form-item>
 
     <el-form-item
@@ -73,7 +81,9 @@ function validate() {
     </el-form-item>
 
     <el-form-item>
-      <el-button type="danger" @click="emit('delete', props.account.id)">Удалить</el-button>
+      <el-button type="danger" @click="emit('delete', props.account.id)"
+        >Удалить</el-button
+      >
     </el-form-item>
   </el-form>
 </template>
